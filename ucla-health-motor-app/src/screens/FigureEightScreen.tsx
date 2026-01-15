@@ -1,5 +1,12 @@
 import React, { useMemo, useRef, useState } from "react";
-import { View, Text, StyleSheet, Pressable, PanResponder } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  PanResponder,
+  Image,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 
@@ -10,7 +17,7 @@ export default function FigureEightScreen({ navigation }: Props) {
     { points: { x: number; y: number }[] }[]
   >([]);
   const currentStroke = useRef<{ x: number; y: number }[]>([]);
-  const minStep = 4;
+  const minStep = 2;
 
   const addInterpolatedPoints = (x: number, y: number) => {
     const last = currentStroke.current[currentStroke.current.length - 1];
@@ -98,7 +105,11 @@ export default function FigureEightScreen({ navigation }: Props) {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.backButtonText}>Back</Text>
+          <Image
+            source={require("../../assets/arrow.png")}
+            style={styles.backIcon}
+            resizeMode="contain"
+          />
         </Pressable>
       </View>
 
@@ -143,10 +154,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#2774AE",
   },
-  backButtonText: {
-    color: "#2774AE",
-    fontSize: 14,
-    fontWeight: "600",
+  backIcon: {
+    width: 18,
+    height: 18,
+    tintColor: "#2774AE",
   },
   title: {
     fontSize: 22,
@@ -197,8 +208,8 @@ const styles = StyleSheet.create({
   },
   drawSegment: {
     position: "absolute",
-    height: 3,
-    borderRadius: 2,
+    height: 4,
+    borderRadius: 3,
     backgroundColor: "#2774AE",
   },
   doneButton: {

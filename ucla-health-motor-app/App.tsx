@@ -5,11 +5,41 @@ import StartScreen from "./src/screens/StartScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import CorridorScreen from "./src/screens/CorridorScreen";
 import FigureEightScreen from "./src/screens/FigureEightScreen";
+import CorridorResultsScreen from "./src/screens/CorridorResultsScreen";
 
 export type RootStackParamList = {
   Start: undefined;
   Home: undefined;
   Corridor: undefined;
+  CorridorResults: {
+      metrics: {
+        completionRate: number;
+        lineCount: number;
+        meanDeviation: number;
+        p95Deviation: number;
+        maxDeviation: number;
+        outOfBoundsPct: number;
+        boundaryCrossings: number;
+        speedStd: number;
+        jerkStd: number;
+        pathEfficiency: number;
+        angleErrorDeg: number;
+        scores: {
+          completion: number;
+          lineCount: number;
+          meanDeviation: number;
+          p95Deviation: number;
+          outOfBounds: number;
+          pathEfficiency: number;
+          angleError: number;
+          speedVariability: number;
+          jerk: number;
+          boundaryCrossings: number;
+          maxDeviation: number;
+        };
+        finalScore: number;
+      };
+  };
   FigureEight: undefined;
 };
 
@@ -25,6 +55,10 @@ export default function App() {
         <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Corridor" component={CorridorScreen} />
+        <Stack.Screen
+          name="CorridorResults"
+          component={CorridorResultsScreen}
+        />
         <Stack.Screen name="FigureEight" component={FigureEightScreen} />
       </Stack.Navigator>
     </NavigationContainer>

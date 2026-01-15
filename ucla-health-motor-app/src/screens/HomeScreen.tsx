@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Image,
+} from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 
@@ -17,7 +24,11 @@ export default function HomeScreen({ navigation }: Props) {
             style={styles.backButton}
             onPress={() => navigation.replace("Start")}
           >
-            <Text style={styles.backButtonText}>Back</Text>
+            <Image
+              source={require("../../assets/arrow.png")}
+              style={styles.backIcon}
+              resizeMode="contain"
+            />
           </Pressable>
         </View>
 
@@ -112,10 +123,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#2774AE",
   },
-  backButtonText: {
-    color: "#2774AE",
-    fontSize: 14,
-    fontWeight: "600",
+  backIcon: {
+    width: 18,
+    height: 18,
+    tintColor: "#2774AE",
   },
   header: {
     marginBottom: 24,

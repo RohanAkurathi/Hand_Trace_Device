@@ -13,6 +13,44 @@ import { RootStackParamList } from "../../App";
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
+  const previewPoints = React.useMemo(() => {
+    const width = 120;
+    const height = 60;
+    const samples = 160;
+    const a = width * 0.45;
+    const b = height * 0.35;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const points = [];
+    for (let i = 0; i <= samples; i += 1) {
+      const t = (i / samples) * Math.PI * 2;
+      const x = centerX + a * Math.sin(t);
+      const y = centerY + b * Math.sin(t) * Math.cos(t);
+      points.push({ x, y });
+    }
+    return points;
+  }, []);
+  const spiralPreviewPoints = React.useMemo(() => {
+    const width = 120;
+    const height = 80;
+    const samples = 220;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const maxRadius = Math.min(width, height) * 0.38;
+    const startRadius = 4;
+    const maxT = Math.PI * 5;
+    const b = (maxRadius - startRadius) / maxT;
+    const points = [];
+    for (let i = 0; i <= samples; i += 1) {
+      const t = (i / samples) * maxT;
+      const r = startRadius + b * t;
+      const x = centerX + r * Math.cos(t);
+      const y = centerY + r * Math.sin(t);
+      points.push({ x, y });
+    }
+    return points;
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -64,12 +102,31 @@ export default function HomeScreen({ navigation }: Props) {
 
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>Figure-8 (∞)</Text>
+            <Text style={styles.cardTitle}>Figure-8 ∞</Text>
           </View>
           <View style={styles.preview}>
             <View style={styles.figureEightPreview}>
-              <View style={styles.figureEightLoopLeft} />
-              <View style={styles.figureEightLoopRight} />
+              {previewPoints.slice(1).map((point, index) => {
+                const prev = previewPoints[index];
+                const dx = point.x - prev.x;
+                const dy = point.y - prev.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+                return (
+                  <View
+                    key={`preview-${index}`}
+                    style={[
+                      styles.figureEightSegment,
+                      {
+                        left: prev.x,
+                        top: prev.y,
+                        width: Math.max(1, length + 1),
+                        transform: [{ rotate: `${angle}rad` }],
+                      },
+                    ]}
+                  />
+                );
+              })}
             </View>
           </View>
           <Text style={styles.cardBody}>
@@ -88,14 +145,39 @@ export default function HomeScreen({ navigation }: Props) {
             <Text style={styles.cardTitle}>Spiral</Text>
           </View>
           <View style={styles.preview}>
-            <Text style={styles.previewText}>Spiral tracing task.</Text>
+            <View style={styles.spiralPreview}>
+              {spiralPreviewPoints.slice(1).map((point, index) => {
+                const prev = spiralPreviewPoints[index];
+                const dx = point.x - prev.x;
+                const dy = point.y - prev.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+                return (
+                  <View
+                    key={`spiral-${index}`}
+                    style={[
+                      styles.spiralSegment,
+                      {
+                        left: prev.x,
+                        top: prev.y,
+                        width: Math.max(1, length + 1),
+                        transform: [{ rotate: `${angle}rad` }],
+                      },
+                    ]}
+                  />
+                );
+              })}
+            </View>
           </View>
           <Text style={styles.cardBody}>
             Begin at the center and trace outward in one continuous motion.
           </Text>
-          <View style={styles.cardButtonDisabled}>
-            <Text style={styles.cardButtonTextDisabled}>Coming soon</Text>
-          </View>
+          <Pressable
+            style={styles.cardButton}
+            onPress={() => navigation.navigate("Spiral")}
+          >
+            <Text style={styles.cardButtonText}>Start Spiral</Text>
+          </Pressable>
         </View>
       </ScrollView>
     </View>
@@ -189,28 +271,28 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   figureEightPreview: {
-    width: 140,
-    height: 70,
+    width: 120,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
   },
-  figureEightLoopLeft: {
+  figureEightSegment: {
     position: "absolute",
-    left: 0,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 3,
-    borderColor: "#0B3556",
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#0B3556",
   },
-  figureEightLoopRight: {
+  spiralPreview: {
+    width: 120,
+    height: 80,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  spiralSegment: {
     position: "absolute",
-    right: 0,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 3,
-    borderColor: "#0B3556",
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "#0B3556",
   },
   cardBody: {
     fontSize: 14,
@@ -229,19 +311,5 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "700",
-  },
-  cardButtonDisabled: {
-    height: 44,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#C7D7E8",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#F7FAFD",
-  },
-  cardButtonTextDisabled: {
-    color: "#7B93A8",
-    fontSize: 14,
-    fontWeight: "600",
   },
 });

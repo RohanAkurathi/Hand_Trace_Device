@@ -11,7 +11,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 
-type Props = NativeStackScreenProps<RootStackParamList, "FigureEight">;
+type Props = NativeStackScreenProps<RootStackParamList, "Spiral">;
 
 type DrawPoint = {
   x: number;
@@ -19,7 +19,7 @@ type DrawPoint = {
   t: number;
 };
 
-export default function FigureEightScreen({ navigation }: Props) {
+export default function SpiralScreen({ navigation }: Props) {
   const [strokes, setStrokes] = useState<{ points: DrawPoint[] }[]>([]);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
   const currentStroke = useRef<DrawPoint[]>([]);
@@ -90,16 +90,19 @@ export default function FigureEightScreen({ navigation }: Props) {
     if (canvasSize.width === 0 || canvasSize.height === 0) {
       return [];
     }
-    const samples = 520;
-    const a = canvasSize.width * 0.32;
-    const b = canvasSize.height * 0.22;
+    const samples = 620;
     const centerX = canvasSize.width / 2;
     const centerY = canvasSize.height / 2;
+    const maxRadius = Math.min(canvasSize.width, canvasSize.height) * 0.38;
+    const startRadius = 6;
+    const maxT = Math.PI * 6;
+    const b = (maxRadius - startRadius) / maxT;
     const points = [];
     for (let i = 0; i <= samples; i += 1) {
-      const t = (i / samples) * Math.PI * 2;
-      const x = centerX + a * Math.sin(t);
-      const y = centerY + b * Math.sin(t) * Math.cos(t);
+      const t = (i / samples) * maxT;
+      const r = startRadius + b * t;
+      const x = centerX + r * Math.cos(t);
+      const y = centerY + r * Math.sin(t);
       points.push({ x, y });
     }
     return points;
@@ -137,7 +140,7 @@ export default function FigureEightScreen({ navigation }: Props) {
 
     const tolerance = Math.max(
       10,
-      Math.min(canvasSize.width, canvasSize.height) * 0.045
+      Math.min(canvasSize.width, canvasSize.height) * 0.04
     );
     const deviations: number[] = [];
     const speeds: number[] = [];
@@ -204,6 +207,9 @@ export default function FigureEightScreen({ navigation }: Props) {
     const p95Index = Math.floor(0.95 * (sortedDeviations.length - 1));
     const p95Deviation = sortedDeviations[p95Index] || 0;
     const maxDeviation = sortedDeviations[sortedDeviations.length - 1] || 0;
+    const outOfBoundsPct =
+      (outOfBoundsPoints / Math.max(totalPoints, 1)) * 100;
+
     let coveredGuidePoints = 0;
     for (let i = 0; i < guidePoints.length; i += 1) {
       const guidePoint = guidePoints[i];
@@ -223,8 +229,6 @@ export default function FigureEightScreen({ navigation }: Props) {
     }
     const coverageRate =
       (coveredGuidePoints / Math.max(guidePoints.length, 1)) * 100;
-    const outOfBoundsPct =
-      (outOfBoundsPoints / Math.max(totalPoints, 1)) * 100;
 
     const meanSpeed =
       speeds.reduce((sum, value) => sum + value, 0) / Math.max(speeds.length, 1);
@@ -248,14 +252,13 @@ export default function FigureEightScreen({ navigation }: Props) {
       const dy = p2.y - p1.y;
       guideLength += Math.sqrt(dx * dx + dy * dy);
     }
-    const idealLength = guideLength;
     const pathEfficiency =
-      idealLength > 0 ? idealLength / Math.max(totalPathLength, 1) : 0;
+      guideLength > 0 ? guideLength / Math.max(totalPathLength, 1) : 0;
 
     const clampScore = (value: number) =>
       Math.max(0, Math.min(100, value));
     const deviationBaseline =
-      Math.min(canvasSize.width, canvasSize.height) * 0.16;
+      Math.min(canvasSize.width, canvasSize.height) * 0.15;
     const scoreFromDeviation = (dev: number, scale: number) =>
       clampScore(100 * (1 - dev / Math.max(scale, 1)));
     const scoreFromPercent = (percent: number) =>
@@ -334,10 +337,10 @@ export default function FigureEightScreen({ navigation }: Props) {
         </Pressable>
       </View>
 
-      <Text style={styles.title}>Figure-8 ∞</Text>
+      <Text style={styles.title}>Spiral</Text>
       <Text style={styles.instructions}>
-        Trace the figure-8 smoothly in one continuous motion without lifting
-        your finger.
+        Begin at the center and trace outward in one continuous motion. Try to
+        follow the spiral path closely.
       </Text>
 
       <View style={styles.content}>
@@ -346,7 +349,7 @@ export default function FigureEightScreen({ navigation }: Props) {
           onLayout={handleCanvasLayout}
           {...panResponder.panHandlers}
         >
-          <View style={styles.figureEight} pointerEvents="none">
+          <View style={styles.spiral} pointerEvents="none">
             {guidePoints.slice(1).map((point, index) => {
               const prev = guidePoints[index];
               const dx = point.x - prev.x;
@@ -375,7 +378,7 @@ export default function FigureEightScreen({ navigation }: Props) {
         <Pressable
           style={styles.doneButton}
           onPress={() =>
-            navigation.navigate("FigureEightResults", {
+            navigation.navigate("SpiralResults", {
               metrics: calculateMetrics(),
             })
           }
@@ -435,7 +438,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  figureEight: {
+  spiral: {
     ...StyleSheet.absoluteFillObject,
   },
   guideSegment: {
@@ -446,7 +449,7 @@ const styles = StyleSheet.create({
   },
   drawSegment: {
     position: "absolute",
-    height: 5,
+    height: 4,
     borderRadius: 3,
     backgroundColor: "#2774AE",
   },

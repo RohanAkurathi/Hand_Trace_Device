@@ -9,10 +9,14 @@ import CorridorResultsScreen from "./src/screens/CorridorResultsScreen";
 import FigureEightResultsScreen from "./src/screens/FigureEightResultsScreen";
 import SpiralScreen from "./src/screens/SpiralScreen";
 import SpiralResultsScreen from "./src/screens/SpiralResultsScreen";
+import TestSelectionScreen from "./src/screens/TestSelectionScreen";
+import IceTestScreen from "./src/screens/IceTestScreen";
 
 export type RootStackParamList = {
   Start: undefined;
+  TestSelection: undefined;
   Home: undefined;
+  IceTest: undefined;
   Corridor: undefined;
   CorridorResults: {
     metrics: {
@@ -103,7 +107,9 @@ export default function App() {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Start" component={StartScreen} />
+        <Stack.Screen name="TestSelection" component={TestSelectionScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="IceTest" component={IceTestScreen} />
         <Stack.Screen name="Corridor" component={CorridorScreen} />
         <Stack.Screen
           name="CorridorResults"

@@ -28,16 +28,16 @@ export default function StartScreen({ navigation }: Props) {
         />
 
         <Text style={styles.kicker}>UCLA Health</Text>
-        <Text style={styles.title}>Motor Function Tracing App</Text>
+        <Text style={styles.title}>UCLA Health Assessment App</Text>
         <Text style={styles.subtitle}>
-          A clinical-grade tracing tool to assess precision, stability, and
-          progress across sessions.
+          Choose between motor tracing assessments and ICE cognitive scoring in
+          a consistent clinical workflow.
         </Text>
       </View>
 
       <Pressable
         style={styles.button}
-        onPress={() => navigation.replace("Home")}
+        onPress={() => navigation.replace("TestSelection")}
       >
         <Text style={styles.buttonText}>Continue</Text>
       </Pressable>

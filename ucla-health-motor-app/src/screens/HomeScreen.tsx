@@ -60,7 +60,7 @@ export default function HomeScreen({ navigation }: Props) {
         <View style={styles.topRow}>
           <Pressable
             style={styles.backButton}
-            onPress={() => navigation.replace("Start")}
+            onPress={() => navigation.replace("TestSelection")}
           >
             <Image
               source={require("../../assets/arrow.png")}

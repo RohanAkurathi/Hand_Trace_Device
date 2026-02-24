@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  Image,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -84,17 +83,11 @@ export default function IceTestScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.topButton}>
-          <Image
-            source={require("../../assets/arrow.png")}
-            style={styles.backIcon}
-            resizeMode="contain"
-          />
+        <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backArrow}>{"<"}</Text>
         </Pressable>
         <Text style={styles.headerTitle}>Calculate ICE Score</Text>
-        <Pressable onPress={() => navigation.goBack()} style={styles.topButton}>
-          <Text style={styles.doneText}>Done</Text>
-        </Pressable>
+        <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -218,6 +211,12 @@ export default function IceTestScreen({ navigation }: Props) {
           </View>
         </View>
       </ScrollView>
+
+      <View style={styles.footer}>
+        <Pressable style={styles.doneButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.doneButtonText}>Done</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -235,30 +234,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 12,
   },
-  topButton: {
-    minWidth: 56,
+  backButton: {
+    width: 36,
+    height: 36,
     alignItems: "center",
     justifyContent: "center",
-    height: 36,
   },
-  backIcon: {
-    width: 18,
-    height: 18,
-    tintColor: "#2774AE",
+  backArrow: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#2774AE",
+    lineHeight: 28,
+  },
+  headerSpacer: {
+    width: 36,
+    height: 36,
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: "700",
     color: "#0B3556",
   },
-  doneText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#2774AE",
-  },
   scrollContent: {
     paddingHorizontal: 16,
-    paddingBottom: 24,
+    paddingBottom: 110,
   },
   scoreCard: {
     backgroundColor: "#F7FAFD",
@@ -352,5 +351,23 @@ const styles = StyleSheet.create({
   },
   numericTextSelected: {
     color: "#FFFFFF",
+  },
+  footer: {
+    position: "absolute",
+    left: 16,
+    right: 16,
+    bottom: 24,
+  },
+  doneButton: {
+    height: 52,
+    borderRadius: 12,
+    backgroundColor: "#2774AE",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  doneButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
   },
 });

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Pressable,
   PanResponder,
-  Image,
   LayoutChangeEvent,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -326,11 +325,7 @@ export default function FigureEightScreen({ navigation }: Props) {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Image
-            source={require("../../assets/arrow.png")}
-            style={styles.backIcon}
-            resizeMode="contain"
-          />
+          <Text style={styles.backArrow}>{"<"}</Text>
         </Pressable>
       </View>
 
@@ -398,17 +393,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   backButton: {
-    alignSelf: "flex-start",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#2774AE",
+    width: 36,
+    height: 36,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  backIcon: {
-    width: 18,
-    height: 18,
-    tintColor: "#2774AE",
+  backArrow: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#2774AE",
+    lineHeight: 28,
   },
   title: {
     fontSize: 22,

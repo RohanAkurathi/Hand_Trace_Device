@@ -313,7 +313,7 @@ export default function CorridorScreen({ navigation }: Props) {
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.backArrow}>{"<"}</Text>
+          <Text style={styles.backArrow}>{"\u2190"}</Text>
         </Pressable>
       </View>
 

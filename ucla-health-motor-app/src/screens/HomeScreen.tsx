@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }: Props) {
             style={styles.backButton}
             onPress={() => navigation.replace("TestSelection")}
           >
-            <Text style={styles.backArrow}>{"<"}</Text>
+            <Text style={styles.backArrow}>{"\u2190"}</Text>
           </Pressable>
         </View>
 

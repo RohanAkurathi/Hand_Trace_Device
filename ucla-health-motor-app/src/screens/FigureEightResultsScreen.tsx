@@ -16,7 +16,7 @@ export default function FigureEightResultsScreen({ navigation, route }: Props) {
     <View style={styles.container}>
       <View style={styles.topRow}>
         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backArrow}>{"<"}</Text>
+          <Text style={styles.backArrow}>{"\u2190"}</Text>
         </Pressable>
       </View>
 

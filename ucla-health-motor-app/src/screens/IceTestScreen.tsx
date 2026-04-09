@@ -84,7 +84,7 @@ export default function IceTestScreen({ navigation }: Props) {
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backArrow}>{"<"}</Text>
+          <Text style={styles.backArrow}>{"\u2190"}</Text>
         </Pressable>
         <Text style={styles.headerTitle}>Calculate ICE Score</Text>
         <View style={styles.headerSpacer} />
